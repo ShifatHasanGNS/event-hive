@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EventHive | Schema Reference</title>
+    <meta
+      name="description"
+      content="Explore the EventHive database schema quickly with an at-a-glance visual reference."
+    />
+    <script>
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['Inter', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#f8fafc',
+                100: '#f1f5f9',
+                200: '#e2e8f0',
+                300: '#cbd5f5',
+                400: '#94a3c8',
+                500: '#64748b',
+                600: '#475569',
+                700: '#334155',
+                800: '#1e293b',
+                900: '#0f172a',
+                950: '#020617',
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="relative min-h-screen overflow-x-hidden bg-brand-950 font-display text-brand-50">
+    <div class="background-gradient"></div>
+    <div class="background-grid"></div>
+
+    <nav class="main-nav">
+      <div class="nav-inner">
+        <a class="brand" href="/">
+          <span class="brand-mark">⟡</span>
+          EventHive
+        </a>
+        <div class="nav-links">
+          <a class="nav-link" href="/">Workspace</a>
+          <a class="nav-link active" href="/schema.html">Schema Reference</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="schema-main mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 lg:gap-14">
+      <header class="schema-hero">
+        <p class="schema-kicker">Reference</p>
+        <h1>Understand the EventHive schema at a glance.</h1>
+        <p>
+          Use this quick guide to confirm table relationships and column details before drafting queries or PL/pgSQL
+          blocks.
+        </p>
+      </header>
+
+      <section class="schema-legend glass-panel">
+        <h2 class="legend-title">Legend</h2>
+        <div class="legend-grid">
+          <p><span class="legend-dot primary"></span>Primary key</p>
+          <p><span class="legend-dot foreign"></span>Foreign key</p>
+          <p><span class="legend-dot unique"></span>Unique constraint</p>
+          <p><span class="legend-dot check"></span>Check / validation</p>
+        </div>
+      </section>
+
+      <div class="section-divider" aria-hidden="true"></div>
+
+      <section class="schema-grid">
+        <article class="schema-card glass-panel">
+          <header>
+            <h3>users</h3>
+            <p>People who attend, organize, or administer events.</p>
+          </header>
+          <ul>
+            <li><span class="badge-dot primary"></span><span class="column">user_id</span><span class="meta">serial · PK</span></li>
+            <li><span class="badge-dot unique"></span><span class="column">email</span><span class="meta">varchar · unique</span></li>
+            <li><span class="badge-dot"></span><span class="column">password_hash</span><span class="meta">varchar</span></li>
+            <li><span class="badge-dot"></span><span class="column">full_name</span><span class="meta">varchar</span></li>
+            <li><span class="badge-dot"></span><span class="column">phone</span><span class="meta">varchar</span></li>
+            <li><span class="badge-dot check"></span><span class="column">role</span><span class="meta">varchar · organizer|attendee|admin</span></li>
+            <li><span class="badge-dot"></span><span class="column">created_at</span><span class="meta">timestamp · default now()</span></li>
+            <li><span class="badge-dot"></span><span class="column">updated_at</span><span class="meta">timestamp · default now()</span></li>
+          </ul>
+        </article>
+
+        <article class="schema-card glass-panel">
+          <header>
+            <h3>events</h3>
+            <p>Scheduled gatherings owned by an organizer.</p>
+          </header>
+          <ul>
+            <li><span class="badge-dot primary"></span><span class="column">event_id</span><span class="meta">serial · PK</span></li>
+            <li><span class="badge-dot foreign"></span><span class="column">organizer_id</span><span class="meta">int → users.user_id</span></li>
+            <li><span class="badge-dot"></span><span class="column">title</span><span class="meta">varchar</span></li>
+            <li><span class="badge-dot"></span><span class="column">description</span><span class="meta">text</span></li>
+            <li><span class="badge-dot check"></span><span class="column">category</span><span class="meta">varchar · technology…</span></li>
+            <li><span class="badge-dot"></span><span class="column">location</span><span class="meta">varchar</span></li>
+            <li><span class="badge-dot"></span><span class="column">venue_name</span><span class="meta">varchar</span></li>
+            <li><span class="badge-dot"></span><span class="column">event_date</span><span class="meta">date</span></li>
+            <li><span class="badge-dot"></span><span class="column">start_time</span><span class="meta">time</span></li>
+            <li><span class="badge-dot"></span><span class="column">end_time</span><span class="meta">time</span></li>
+            <li><span class="badge-dot check"></span><span class="column">capacity</span><span class="meta">integer > 0</span></li>
+            <li><span class="badge-dot check"></span><span class="column">ticket_price</span><span class="meta">decimal ≥ 0</span></li>
+            <li><span class="badge-dot check"></span><span class="column">status</span><span class="meta">varchar · upcoming…</span></li>
+            <li><span class="badge-dot"></span><span class="column">created_at</span><span class="meta">timestamp · default</span></li>
+            <li><span class="badge-dot"></span><span class="column">updated_at</span><span class="meta">timestamp · default</span></li>
+          </ul>
+        </article>
+
+        <article class="schema-card glass-panel">
+          <header>
+            <h3>registrations</h3>
+            <p>Tickets reserved by attendees for a specific event.</p>
+          </header>
+          <ul>
+            <li><span class="badge-dot primary"></span><span class="column">registration_id</span><span class="meta">serial · PK</span></li>
+            <li><span class="badge-dot foreign"></span><span class="column">event_id</span><span class="meta">int → events.event_id</span></li>
+            <li><span class="badge-dot foreign"></span><span class="column">user_id</span><span class="meta">int → users.user_id</span></li>
+            <li><span class="badge-dot"></span><span class="column">registration_date</span><span class="meta">timestamp · default now()</span></li>
+            <li><span class="badge-dot check"></span><span class="column">status</span><span class="meta">varchar · confirmed…</span></li>
+            <li><span class="badge-dot check"></span><span class="column">payment_status</span><span class="meta">varchar · pending…</span></li>
+            <li><span class="badge-dot"></span><span class="column">payment_amount</span><span class="meta">decimal</span></li>
+            <li><span class="badge-dot unique"></span><span class="column">booking_reference</span><span class="meta">varchar · unique</span></li>
+            <li><span class="badge-dot unique"></span><span class="column">(event_id, user_id)</span><span class="meta">composite unique</span></li>
+          </ul>
+        </article>
+
+        <article class="schema-card glass-panel">
+          <header>
+            <h3>event_feedback</h3>
+            <p>Ratings and comments submitted after events.</p>
+          </header>
+          <ul>
+            <li><span class="badge-dot primary"></span><span class="column">feedback_id</span><span class="meta">serial · PK</span></li>
+            <li><span class="badge-dot foreign"></span><span class="column">event_id</span><span class="meta">int → events.event_id</span></li>
+            <li><span class="badge-dot foreign"></span><span class="column">user_id</span><span class="meta">int → users.user_id</span></li>
+            <li><span class="badge-dot check"></span><span class="column">rating</span><span class="meta">integer 1–5</span></li>
+            <li><span class="badge-dot"></span><span class="column">comment</span><span class="meta">text</span></li>
+            <li><span class="badge-dot"></span><span class="column">submitted_at</span><span class="meta">timestamp · default</span></li>
+            <li><span class="badge-dot unique"></span><span class="column">(event_id, user_id)</span><span class="meta">composite unique</span></li>
+          </ul>
+        </article>
+
+        <article class="schema-card glass-panel">
+          <header>
+            <h3>event_tags</h3>
+            <p>Topic labels attached to events.</p>
+          </header>
+          <ul>
+            <li><span class="badge-dot primary"></span><span class="column">tag_id</span><span class="meta">serial · PK</span></li>
+            <li><span class="badge-dot foreign"></span><span class="column">event_id</span><span class="meta">int → events.event_id</span></li>
+            <li><span class="badge-dot"></span><span class="column">tag_name</span><span class="meta">varchar</span></li>
+            <li><span class="badge-dot unique"></span><span class="column">(event_id, tag_name)</span><span class="meta">composite unique</span></li>
+          </ul>
+        </article>
+      </section>
+
+      <div class="section-divider" aria-hidden="true"></div>
+
+      <section class="schema-notes glass-panel">
+        <h2>Helpful constraints & indexes</h2>
+        <ul>
+          <li><strong>users</strong> — index on <code>email</code> and <code>role</code> keeps authentication and role filters snappy.</li>
+          <li><strong>events</strong> — indexed by <code>event_date</code>, <code>category</code>, <code>status</code>, and <code>location</code> for common dashboard filters.</li>
+          <li><strong>registrations</strong> — composite indexes cover <code>event_id + status</code> and <code>payment_status</code> for operational reporting.</li>
+          <li><strong>event_feedback</strong> — composite key on <code>event_id + user_id</code> prevents duplicate reviews.</li>
+          <li><strong>event_tags</strong> — unique pair ensures no duplicate tags per event.</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

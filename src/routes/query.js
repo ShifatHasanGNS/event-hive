@@ -4,7 +4,14 @@ const { executeStatements } = require('../utils/db');
 
 const router = express.Router();
 
-const FORBIDDEN_KEYWORDS = ['DROP TABLE', 'DROP DATABASE', 'TRUNCATE', 'ALTER SYSTEM', 'ALTER DATABASE', 'DROP SCHEMA'];
+const FORBIDDEN_PATTERNS = [
+  /\bDROP TABLE\b/i,
+  /\bDROP DATABASE\b/i,
+  /\bTRUNCATE\b/i,
+  /\bALTER SYSTEM\b/i,
+  /\bALTER DATABASE\b/i,
+  /\bDROP SCHEMA\b/i,
+];
 
 router.post('/generate', async (req, res) => {
   const { prompt } = req.body || {};
@@ -18,7 +25,6 @@ router.post('/generate', async (req, res) => {
     const plan = await generateSqlFromPrompt(normalizedPrompt);
 
     validateStatements(plan.statements);
-    enforceGuards(plan.statements);
 
     return res.json({
       prompt: normalizedPrompt,
@@ -29,6 +35,7 @@ router.post('/generate', async (req, res) => {
     const statusCode = error.statusCode || 500;
     return res.status(statusCode).json({
       error: error.message || 'Failed to generate SQL for the prompt.',
+      code: error.code,
     });
   }
 });
@@ -57,6 +64,8 @@ router.post('/execute', async (req, res) => {
     console.error('Query execution failed:', error);
     return res.status(error.statusCode || 500).json({
       error: error.message || 'Failed to execute the provided SQL statements.',
+      code: error.code,
+      blockedStatement: error.blockedStatement,
     });
   }
 });
@@ -76,16 +85,22 @@ function validateStatements(statements) {
 function enforceGuards(statements) {
   for (const statement of statements) {
     if (shouldBlockStatement(statement)) {
-      const error = new Error(`Blocked potentially destructive statement: ${statement}`);
+      const error = new Error('Blocked potentially destructive statement.');
       error.statusCode = 400;
+      error.code = 'GUARD_BLOCKED';
+      error.blockedStatement = statement;
       throw error;
     }
   }
 }
 
 function shouldBlockStatement(statement) {
-  const normalized = statement.toUpperCase();
-  return FORBIDDEN_KEYWORDS.some((keyword) => normalized.includes(keyword));
+  if (typeof statement !== 'string') {
+    return false;
+  }
+
+  const normalized = statement.replace(/\s+/g, ' ');
+  return FORBIDDEN_PATTERNS.some((pattern) => pattern.test(normalized));
 }
 
 function coerceStatements(rawStatements, sqlText) {

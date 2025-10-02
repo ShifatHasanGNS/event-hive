@@ -5,8 +5,10 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
+    "build": "echo 'EventHive has no compilation step – static assets are ready.'",
     "start": "node src/server.js",
-    "test": "echo \"No automated tests defined\" && exit 0"
+    "test": "echo \"No automated tests defined\" && exit 0",
+    "lint": "eslint \"src/**/*.js\" \"public/**/*.js\" \"api/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -21,13 +23,16 @@
   },
   "homepage": "https://github.com/ShifatHasanGNS/event-hive#readme",
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.1",
+    "@neondatabase/serverless": "1.0.2",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
+    "dotenv": "17.2.3",
     "express": "^5.1.0",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "serverless-http": "4.0.0"
   },
   "devDependencies": {
+    "eslint": "^9.36.0",
+    "globals": "16.4.0",
     "nodemon": "^3.1.10"
   }
 }

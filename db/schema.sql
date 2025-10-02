@@ -161,6 +161,7 @@ INSERT INTO events (organizer_id, title, description, category, location, venue_
 (2, 'Photography Workshop', 'Learn professional photography techniques', 'arts', 'Cox''s Bazar', 'Sea Pearl Resort', '2025-12-10', '08:00', '16:00', 30, 3000.00, 'upcoming'),
 (1, 'Blockchain Technology Conference', 'Discussing blockchain applications in Bangladesh', 'technology', 'Dhaka', 'Le Méridien', '2025-11-25', '09:00', '17:00', 150, 2000.00, 'upcoming'),
 (6, 'University Career Fair 2025', 'Meet top employers and explore career opportunities', 'education', 'Dhaka', 'BUET Campus', '2025-10-28', '10:00', '16:00', 2000, 0.00, 'upcoming')
+;
 
 -- Insert registrations
 INSERT INTO registrations (event_id, user_id, status, payment_status, payment_amount, booking_reference) VALUES

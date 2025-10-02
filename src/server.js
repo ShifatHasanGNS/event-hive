@@ -23,6 +23,10 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`EventHive server listening on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`EventHive server listening on port ${PORT}`);
+  });
+}
+
+module.exports = app;

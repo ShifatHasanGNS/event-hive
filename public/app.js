@@ -13,6 +13,7 @@ const runSqlButton = document.getElementById('run-sql-button');
 const generatedSql = document.getElementById('generated-sql');
 const clearSqlButton = document.getElementById('clear-sql');
 const copyPromptButton = document.getElementById('copy-prompt');
+const toastContainer = document.getElementById('toast-container');
 
 let currentPlan = null;
 const formatter = typeof window !== 'undefined' ? window.sqlFormatter : null;
@@ -58,7 +59,14 @@ async function handleSubmit(event) {
     const payload = await response.json();
 
     if (!response.ok) {
-      throw new Error(payload?.error || 'Request failed.');
+      const message = payload?.error || 'Request failed.';
+      if (payload?.code === 'GUARD_BLOCKED') {
+        showToast(message);
+      } else {
+        showError(message);
+      }
+      resultsSummary.textContent = 'Execution failed. Review the SQL and try again.';
+      return;
     }
 
     const formattedPlan = formatPlanForDisplay(payload.plan);
@@ -545,6 +553,29 @@ function renderPendingExecution() {
     'rounded-2xl border border-white/5 bg-brand-950/50 px-5 py-6 text-sm text-brand-300';
   notice.textContent = 'SQL generated. Use Execute Query to run these statements against the database.';
   resultsContainer.appendChild(notice);
+}
+
+function showToast(message, duration = 2500) {
+  if (!toastContainer || !message) {
+    return;
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
+
+  const dismissAfter = Number.isFinite(duration) ? duration : 2500;
+  setTimeout(() => {
+    toast.dataset.state = 'closing';
+    toast.addEventListener(
+      'animationend',
+      () => {
+        toast.remove();
+      },
+      { once: true },
+    );
+  }, dismissAfter);
 }
 
 function showError(message) {

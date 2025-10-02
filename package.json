@@ -7,7 +7,6 @@
     "dev": "nodemon src/server.js",
     "build": "echo 'EventHive has no compilation step – static assets are ready.'",
     "start": "node src/server.js",
-    "test": "echo \"No automated tests defined\" && exit 0",
     "lint": "eslint \"src/**/*.js\" \"public/**/*.js\" \"api/**/*.js\""
   },
   "repository": {

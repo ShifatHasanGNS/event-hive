@@ -3,6 +3,7 @@
 EventHive is an AI-assisted event database explorer for the Database Systems Lab project. It pairs Google Gemini Flash with a richly constrained PostgreSQL dataset so you can ask natural-language questions and instantly see the generated SQL, PostgreSQL notices (including `RAISE NOTICE` output), and result tables—all in a single-page dark UI.
 
 ## ✨ Features
+
 - **Natural language to SQL/PL/pgSQL** via Gemini Flash with schema awareness and JSON-structured responses.
 - **Safe execution pipeline** that validates statements, rejects destructive commands, captures execution timings, and surfaces PostgreSQL notices.
 - **Neon-ready connection support** via `@neondatabase/serverless` (set `DATABASE_CLIENT=neon`).
@@ -10,6 +11,7 @@ EventHive is an AI-assisted event database explorer for the Database Systems Lab
 - **PostgreSQL starter schema and seed data** (`db/schema.sql`) covering users, events, registrations, feedback, and tags with indexes and constraints from the project plan.
 
 ## 🧱 Tech Stack
+
 - **Backend:** Node.js, Express, `pg`, `dotenv`
 - **Database:** PostgreSQL (tested with Neon free tier)
 - **AI:** Google Gemini 2.5 Flash REST API
@@ -18,16 +20,19 @@ EventHive is an AI-assisted event database explorer for the Database Systems Lab
 ## 🚀 Getting Started
 
 ### 1. Prerequisites
-- Node.js 18+
+
+- Bun 1.0+ (bundled Node-compatible runtime)
 - PostgreSQL database (local or hosted). NeonDB works great.
 - Google Gemini API key (free tier works). Sign up at [ai.google.dev](https://ai.google.dev/).
 
 ### 2. Install dependencies
+
 ```bash
-npm install
+bun install
 ```
 
 ### 3. Configure environment
+
 Create a `.env` file in the project root (you can copy `.env.example`).
 
 ```
@@ -45,6 +50,7 @@ When using Neon, set `DATABASE_CLIENT=neon` and keep the `postgresql://...` conn
 > **Note:** Neon\'s serverless driver does not currently emit `NOTICE` events, so the System Messages panel will only show Gemini notes when running in that mode.
 
 ### 4. Bootstrap the database
+
 Run the provided schema + seed script against your database:
 
 ```bash
@@ -52,12 +58,15 @@ psql "$DATABASE_URL" -f db/schema.sql
 ```
 
 ### 5. Start the server
+
 ```bash
-npm run dev
+bun run dev
 ```
+
 Visit `http://localhost:4000` to load the EventHive interface.
 
 ## 🧠 Prompt Workflow
+
 1. You enter a natural language question.
 2. The backend enriches the prompt with the schema context and asks Gemini Flash to respond **strictly** in JSON (title, statements array, notes, expectation).
 3. Each returned SQL/PL/pgSQL statement is validated, executed sequentially, and timed. PostgreSQL `NOTICE` messages are captured via the `pg` client.
@@ -66,13 +75,15 @@ Visit `http://localhost:4000` to load the EventHive interface.
 Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proactively blocked.
 
 ## 📚 Helpful Prompts
+
 - `Show upcoming technology events in December with organizer and ticket price.`
 - `Calculate revenue and capacity utilization for AI & Machine Learning Summit 2025.`
 - `List attendees who registered for more than two events along with total spend.`
 - `Find events with average feedback rating above 4 and include their tags.`
 
 ## 🛠 Project Structure
-```
+
+```.
 ├── db/
 │   └── schema.sql            # Full schema + seed data from the project plan
 ├── public/
@@ -95,8 +106,10 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 ```
 
 ## ✅ Health Checks
+
 - `GET /health` → `{ "status": "ok" }`
 - `POST /api/query` → `{ prompt, plan, notices, results, executionTimeMs }`
 
 ## 📄 License
+
 MIT

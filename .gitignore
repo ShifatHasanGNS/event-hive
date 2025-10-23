@@ -1,5 +1,5 @@
 node_modules/
-.npm-cache/
+.bun/
 .env
 .env.local
 **/.DS_Store

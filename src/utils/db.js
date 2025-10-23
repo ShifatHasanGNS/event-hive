@@ -12,19 +12,19 @@ const useNeon = clientPreference === 'neon';
 
 const pool = useNeon
   ? new NeonPool({
-      connectionString,
-      max: Number(process.env.PG_POOL_MAX || 10),
-      idleTimeoutMillis: Number(process.env.PG_IDLE_TIMEOUT || 30000),
-      connectionTimeoutMillis: Number(process.env.PG_CONNECTION_TIMEOUT || 10000),
-      ssl: shouldUseSsl(connectionString) ? { rejectUnauthorized: false } : false,
-    })
+    connectionString,
+    max: Number(process.env.PG_POOL_MAX || 10),
+    idleTimeoutMillis: Number(process.env.PG_IDLE_TIMEOUT || 30000),
+    connectionTimeoutMillis: Number(process.env.PG_CONNECTION_TIMEOUT || 10000),
+    ssl: shouldUseSsl(connectionString) ? { rejectUnauthorized: false } : false,
+  })
   : new Pool({
-      connectionString,
-      ssl: shouldUseSsl(connectionString) ? { rejectUnauthorized: false } : false,
-      max: Number(process.env.PG_POOL_MAX || 10),
-      idleTimeoutMillis: Number(process.env.PG_IDLE_TIMEOUT || 30000),
-      connectionTimeoutMillis: Number(process.env.PG_CONNECTION_TIMEOUT || 10000),
-    });
+    connectionString,
+    ssl: shouldUseSsl(connectionString) ? { rejectUnauthorized: false } : false,
+    max: Number(process.env.PG_POOL_MAX || 10),
+    idleTimeoutMillis: Number(process.env.PG_IDLE_TIMEOUT || 30000),
+    connectionTimeoutMillis: Number(process.env.PG_CONNECTION_TIMEOUT || 10000),
+  });
 
 async function executeStatements(statements) {
   return executeWithPool(statements);
@@ -70,9 +70,9 @@ async function executeWithPool(statements) {
         durationMs: Number(statementEnd - statementStart) / 1_000_000,
         fields: Array.isArray(queryResult.fields)
           ? queryResult.fields.map((field) => ({
-              name: field.name,
-              dataTypeID: field.dataTypeID,
-            }))
+            name: field.name,
+            dataTypeID: field.dataTypeID,
+          }))
           : [],
         rows: hasRows ? queryResult.rows : [],
         text: buildTextOutput(perStatementNotices),

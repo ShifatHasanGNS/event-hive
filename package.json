@@ -4,10 +4,11 @@
   "description": "AI-assisted event database explorer with natural language querying",
   "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon src/server.js",
+    "dev": "bun --watch src/server.js",
     "build": "echo 'EventHive has no compilation step – static assets are ready.'",
-    "start": "node src/server.js",
-    "lint": "eslint \"src/**/*.js\" \"public/**/*.js\" \"api/**/*.js\""
+    "start": "bun src/server.js",
+    "lint": "bunx eslint \"src/**/*.js\" \"public/**/*.js\" \"api/**/*.js\"",
+    "cleanup": "rm -rf node_modules bun.lock"
   },
   "repository": {
     "type": "git",
@@ -31,7 +32,6 @@
   },
   "devDependencies": {
     "eslint": "^9.36.0",
-    "globals": "16.4.0",
-    "nodemon": "^3.1.10"
+    "globals": "16.4.0"
   }
 }

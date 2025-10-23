@@ -49,7 +49,7 @@ EventHive is a **prompt-based query interface** for an event management database
 
 Stores all system users (organizers, attendees, admins)
 
-```
+```.
 - user_id (SERIAL PK)
 - email (VARCHAR UNIQUE)
 - password_hash (VARCHAR)
@@ -64,7 +64,7 @@ Stores all system users (organizers, attendees, admins)
 
 Main events table with all event information
 
-```
+```.
 - event_id (SERIAL PK)
 - organizer_id (INT FK → users)
 - title (VARCHAR)
@@ -86,7 +86,7 @@ Main events table with all event information
 
 Tracks user bookings/registrations for events
 
-```
+```.
 - registration_id (SERIAL PK)
 - event_id (INT FK → events)
 - user_id (INT FK → users)
@@ -102,7 +102,7 @@ Tracks user bookings/registrations for events
 
 Stores ratings and reviews from attendees
 
-```
+```.
 - feedback_id (SERIAL PK)
 - event_id (INT FK → events)
 - user_id (INT FK → users)
@@ -116,7 +116,7 @@ Stores ratings and reviews from attendees
 
 Multiple tags per event for categorization and search
 
-```
+```.
 - tag_id (SERIAL PK)
 - event_id (INT FK → events)
 - tag_name (VARCHAR)
@@ -736,5 +736,3 @@ SELECT 'event_tags', COUNT(*) FROM event_tags;
 - ✅ Real-time PL/pgSQL creation
 - ✅ Clean, professional UI
 - ✅ Comprehensive documentation
-
-## Note: use `.env` file for sensitive info like DB connection strings and API keys.

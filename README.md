@@ -23,7 +23,7 @@ EventHive is an AI-assisted event database explorer for the Database Systems Lab
 
 - Bun 1.0+ (bundled Node-compatible runtime)
 - PostgreSQL database (local or hosted). NeonDB works great.
-- Google Gemini API key (free tier works). Sign up at [ai.google.dev](https://ai.google.dev/).
+- Google Gemini API key (free tier works). Sign up at [Google AI Studio](https://aistudio.google.com/app/api-keys).
 
 ### 2. Install dependencies
 
@@ -35,12 +35,12 @@ bun install
 
 Create a `.env` file in the project root (you can copy `.env.example`).
 
-```
-PORT=4000
-DATABASE_URL=postgres://<user>:<password>@<host>:<port>/<database>
-GEMINI_API_KEY=your_gemini_key
-GEMINI_MODEL=gemini-2.5-flash
-DATABASE_CLIENT=pg # use "neon" when connecting with @neondatabase/serverless
+```.
+PORT="4000"
+DATABASE_URL="postgres://<user>:<password>@<host>:<port>/<database>"
+GEMINI_API_KEY="your_gemini_key"
+GEMINI_MODEL="gemini-2.5-flash"
+DATABASE_CLIENT="neon" # or "pg" for standard Postgres
 ```
 
 If you are connecting to a local Postgres without SSL, add `DATABASE_SSL=false`.
@@ -60,12 +60,12 @@ psql "$DATABASE_URL" -f db/schema.sql
 ### 5. Start the dev server
 
 ```bash
-bun run dev
+bun dev
 ```
 
 This runs Tailwind in watch mode and starts the Bun server together. Visit `http://localhost:4000` to load the EventHive interface.
 
-> Need only the API? Run `bun run dev:server`. To rebuild styles for production, run `bun run tailwind:build`.
+> Need only the API? Run `bun dev:server`. To rebuild styles for production, run `bun tailwind:build`.
 
 ## 🧠 Prompt Workflow
 

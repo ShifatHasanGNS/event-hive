@@ -15,7 +15,7 @@ EventHive is an AI-assisted event database explorer for the Database Systems Lab
 - **Backend:** Node.js, Express, `pg`, `dotenv`
 - **Database:** PostgreSQL (tested with Neon free tier)
 - **AI:** Google Gemini 2.5 Flash REST API
-- **Frontend:** Static HTML, Tailwind CSS (CDN), vanilla JavaScript
+- **Frontend:** Static HTML, Tailwind CSS (CLI build), vanilla JavaScript
 
 ## 🚀 Getting Started
 
@@ -57,13 +57,15 @@ Run the provided schema + seed script against your database:
 psql "$DATABASE_URL" -f db/schema.sql
 ```
 
-### 5. Start the server
+### 5. Start the dev server
 
 ```bash
 bun run dev
 ```
 
-Visit `http://localhost:4000` to load the EventHive interface.
+This runs Tailwind in watch mode and starts the Bun server together. Visit `http://localhost:4000` to load the EventHive interface.
+
+> Need only the API? Run `bun run dev:server`. To rebuild styles for production, run `bun run tailwind:build`.
 
 ## 🧠 Prompt Workflow
 
@@ -87,9 +89,10 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 ├── db/
 │   └── schema.sql            # Full schema + seed data from the project plan
 ├── public/
-│   ├── index.html            # Tailwind dark-mode single page
+│   ├── index.html            # Tailwind dark-mode workspace
+│   ├── schema.html           # Schema reference view
 │   ├── app.js                # Frontend logic (fetch, rendering)
-│   └── styles.css            # Extra theming + utilities
+│   └── styles.css            # Compiled Tailwind build output
 ├── src/
 │   ├── app.js                # Express app factory + static hosting
 │   ├── index.js              # Local server entrypoint
@@ -98,11 +101,15 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 │   ├── lib/
 │   │   ├── db.js             # pg Pool configuration
 │   │   └── gemini-client.js  # Gemini Flash JSON response helper
-│   └── routes/
-│       └── query.js          # AI generation + PostgreSQL execution pipeline
+│   ├── routes/
+│   │   └── query.js          # AI generation + PostgreSQL execution pipeline
+│   └── styles/
+│       └── tailwind.css      # Tailwind entrypoint + custom layers
 ├── .env.example
 ├── EventHive_Project_Plan.md
+├── postcss.config.js
 ├── package.json
+├── tailwind.config.js
 └── README.md
 ```
 

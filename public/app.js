@@ -218,6 +218,20 @@ function ensureStatementSemicolon(statement) {
   return /;\s*$/.test(trimmed) ? trimmed : `${trimmed};`;
 }
 
+function toggleButtonLoadingState(button, isLoading) {
+  if (!button) {
+    return;
+  }
+  const defaultSlot = button.querySelector('[data-slot="default"]');
+  const loadingSlot = button.querySelector('[data-slot="loading"]');
+  if (defaultSlot) {
+    defaultSlot.classList.toggle('hidden', isLoading);
+  }
+  if (loadingSlot) {
+    loadingSlot.classList.toggle('hidden', !isLoading);
+  }
+}
+
 function renderSystemMessages(plan, notices) {
   systemMessages.innerHTML = '';
 
@@ -245,7 +259,7 @@ function renderSystemMessages(plan, notices) {
 
   if (!listItems.length) {
     systemMessages.innerHTML = `
-      <li class="rounded-2xl border border-white/5 bg-brand-950/60 px-4 py-3 text-sm text-brand-300">
+      <li class="message-placeholder">
         No messages received from Gemini or PostgreSQL.
       </li>
     `;
@@ -261,10 +275,10 @@ function renderSystemMessages(plan, notices) {
 function buildMessageNode(label, message) {
   if (!messageTemplate?.content) {
     const fallback = document.createElement('li');
-    fallback.className = 'rounded-2xl border border-white/5 bg-brand-950/60 px-4 py-3';
+    fallback.className = 'message-card';
     fallback.innerHTML = `
-      <p class="text-xs uppercase tracking-[0.3em] text-brand-500">${label}</p>
-      <p class="mt-2 text-sm text-brand-200">${message}</p>
+      <p class="message-card__label">${label}</p>
+      <p class="message-card__body">${message}</p>
     `;
     return fallback;
   }
@@ -283,8 +297,7 @@ function renderResults(results) {
 
   if (!Array.isArray(results) || !results.length) {
     const placeholder = document.createElement('div');
-    placeholder.className =
-      'rounded-2xl border border-white/5 bg-brand-950/50 px-5 py-8 text-center text-sm text-brand-300';
+    placeholder.className = 'result-placeholder';
     placeholder.textContent = 'No result sets returned for this query. If you executed DDL, check the system messages.';
     resultsContainer.appendChild(placeholder);
     return;
@@ -292,24 +305,30 @@ function renderResults(results) {
 
   results.forEach((result, index) => {
     const card = document.createElement('article');
-    card.className = 'space-y-5 rounded-2xl border border-white/5 bg-brand-950/60 p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.8)]';
+    card.className = 'result-card';
 
     const header = document.createElement('header');
     header.className = 'flex flex-wrap items-center justify-between gap-3';
 
     const title = document.createElement('div');
     title.innerHTML = `
-      <p class="text-xs uppercase tracking-[0.3em] text-brand-500">Result ${index + 1}</p>
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-brand-400">Result ${index + 1}</p>
     `;
     header.appendChild(title);
 
     const meta = document.createElement('div');
-    meta.className = 'flex flex-wrap items-center gap-2 text-xs text-brand-400';
-    meta.innerHTML = `
-      <span class="badge">${result.rowCount || 0} row${result.rowCount === 1 ? '' : 's'}</span>
-      <span class="badge">${formatDuration(result.durationMs)} ms</span>
-      <span class="badge">${(result.command || 'STATEMENT').toUpperCase()}</span>
-    `;
+    meta.className = 'flex flex-wrap items-center gap-2';
+    const metrics = [
+      `${result.rowCount || 0} row${result.rowCount === 1 ? '' : 's'}`,
+      `${formatDuration(result.durationMs)} ms`,
+      `${(result.command || 'STATEMENT').toUpperCase()}`,
+    ];
+    metrics.forEach((value) => {
+      const pill = document.createElement('span');
+      pill.className = 'metric-chip';
+      pill.textContent = value;
+      meta.appendChild(pill);
+    });
     header.appendChild(meta);
 
     card.appendChild(header);
@@ -319,31 +338,32 @@ function renderResults(results) {
 
     if (hasRows) {
       const tableWrapper = document.createElement('div');
-      tableWrapper.className = 'custom-scrollbar overflow-x-auto rounded-2xl border border-white/5 bg-brand-950/40';
+      tableWrapper.className = 'table-wrapper';
 
       const table = document.createElement('table');
-      table.className = 'min-w-full divide-y divide-white/5 text-sm';
+      table.className = 'result-table';
 
       const thead = document.createElement('thead');
-      thead.className = 'bg-white/5 backdrop-blur';
+      thead.className = 'result-table__head';
       const headerRow = document.createElement('tr');
+      headerRow.className = 'result-table__row';
       columnNames.forEach((name) => {
         const th = document.createElement('th');
         th.scope = 'col';
-        th.className = 'whitespace-nowrap px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-brand-200';
+        th.className = 'result-table__heading';
         th.textContent = name;
         headerRow.appendChild(th);
       });
       thead.appendChild(headerRow);
 
       const tbody = document.createElement('tbody');
-      tbody.className = 'divide-y divide-white/5';
+      tbody.className = 'result-table__body';
       result.rows.forEach((row) => {
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-white/5';
+        tr.className = 'result-table__row';
         columnNames.forEach((name) => {
           const td = document.createElement('td');
-          td.className = 'whitespace-nowrap px-4 py-2 text-brand-100';
+          td.className = 'result-table__cell';
           td.textContent = formatCellValue(row[name]);
           tr.appendChild(td);
         });
@@ -397,8 +417,8 @@ function updateResultsSummary(payload, plan = null) {
 
   stats.forEach((stat) => {
     const badge = document.createElement('span');
-    badge.className = 'stat-badge';
-    badge.innerHTML = `<strong>${stat.value}</strong> ${stat.label}`;
+    badge.className = 'stat-chip';
+    badge.innerHTML = `<span class="font-semibold text-white">${stat.value}</span> ${stat.label}`;
     resultsStats.appendChild(badge);
   });
 }
@@ -496,6 +516,7 @@ function hasSqlInput() {
 
 function setGenerateLoading(isLoading) {
   generateButton.dataset.loading = String(isLoading);
+  toggleButtonLoadingState(generateButton, isLoading);
   generateButton.disabled = isLoading;
 }
 
@@ -509,6 +530,7 @@ function setGenerateEnabled(isEnabled) {
 
 function setExecuteLoading(isLoading) {
   runSqlButton.dataset.loading = String(isLoading);
+  toggleButtonLoadingState(runSqlButton, isLoading);
   if (isLoading) {
     runSqlButton.disabled = true;
   }
@@ -537,8 +559,7 @@ function prepareForGeneration() {
 function renderPendingExecution() {
   resultsContainer.innerHTML = '';
   const notice = document.createElement('div');
-  notice.className =
-    'rounded-2xl border border-white/5 bg-brand-950/50 px-5 py-6 text-sm text-brand-300';
+  notice.className = 'notice-card';
   notice.textContent = 'SQL generated. Use Execute Query to run these statements against the database.';
   resultsContainer.appendChild(notice);
 }
@@ -549,20 +570,20 @@ function showToast(message, duration = 2500) {
   }
 
   const toast = document.createElement('div');
-  toast.className = 'toast';
+  toast.className = 'toast-alert opacity-0 translate-y-2';
   toast.textContent = message;
   toastContainer.appendChild(toast);
 
+  requestAnimationFrame(() => {
+    toast.classList.remove('opacity-0', 'translate-y-2');
+  });
+
   const dismissAfter = Number.isFinite(duration) ? duration : 2500;
   setTimeout(() => {
-    toast.dataset.state = 'closing';
-    toast.addEventListener(
-      'animationend',
-      () => {
-        toast.remove();
-      },
-      { once: true },
-    );
+    toast.classList.add('opacity-0', 'translate-y-2');
+    setTimeout(() => {
+      toast.remove();
+    }, 200);
   }, dismissAfter);
 }
 

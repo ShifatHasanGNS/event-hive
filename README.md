@@ -1,6 +1,6 @@
 # EventHive
 
-EventHive is an AI-assisted event database explorer for the Database Systems Lab project. It pairs Google Gemini Flash with a richly constrained PostgreSQL dataset so you can ask natural-language questions and instantly see the generated SQL, PostgreSQL notices (including `RAISE NOTICE` output), and result tables—all in a single-page dark UI. The project is currently local-only; no hosted deployment is bundled.
+EventHive is an AI-assisted event database explorer for the Database Systems Lab project. It pairs Google Gemini Flash with a richly constrained PostgreSQL dataset so you can ask natural-language questions and instantly see the generated SQL, PostgreSQL notices (including `RAISE NOTICE` output), and result tables—all in a single-page dark UI. The project runs locally by design; no hosted deployment is bundled.
 
 ## ✨ Features
 
@@ -35,12 +35,12 @@ bun install
 
 Create a `.env` file in the project root (you can copy `.env.example`).
 
-```.
+```env
 PORT="4000"
 DATABASE_URL="postgres://<user>:<password>@<host>:<port>/<database>"
 GEMINI_API_KEY="your_gemini_key"
 GEMINI_MODEL="gemini-2.5-flash"
-DATABASE_CLIENT="neon" # or "pg" for standard Postgres
+DATABASE_CLIENT="pg" # use "neon" when targeting Neon serverless
 ```
 
 If you are connecting to a local Postgres without SSL, add `DATABASE_SSL=false`.
@@ -85,35 +85,27 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 
 ## 🛠 Project Structure
 
-```.
-├── api/
-│   └── index.js              # Serverless adapter for deployment platforms (e.g., Vercel)
-├── db/
-│   └── schema.sql            # Full schema + seed data from the project plan
+```text
+.
+├── api/                     # Optional serverless adapter (local development only)
+├── db/                      # PostgreSQL schema + seed script
 ├── docs/
-│   └── Plan.md               # Original project plan & documentation
-├── public/
-│   ├── app.js                # Frontend logic (fetch, rendering)
-│   ├── index.html            # Tailwind dark-mode workspace
-│   ├── schema.html           # Schema reference view
-│   └── styles.css            # Compiled Tailwind build output
+│   ├── Plan.md              # Original build plan
+│   ├── Report.md            # Database Systems Lab report
+│   └── diagrams/            # Exported schema/ER figures
+├── public/                  # Static assets served by Bun (HTML, JS, compiled CSS)
 ├── src/
-│   ├── app.js                # Express app factory + static hosting
+│   ├── app.js               # Express app factory
 │   ├── config/
-│   │   └── schema-context.js # Schema summary injected into prompts
-│   ├── index.js              # Local Bun entrypoint
-│   ├── lib/
-│   │   ├── db.js             # pg/Neon execution helpers
-│   │   └── gemini-client.js  # Gemini Flash JSON response helper
-│   ├── routes/
-│   │   └── query.js          # AI generation + PostgreSQL execution pipeline
-│   └── styles/
-│       └── tailwind.css      # Tailwind entrypoint + custom layers/component classes
+│   │   └── schema-context.js
+│   ├── index.js             # Bun entrypoint
+│   ├── lib/                 # Database + Gemini helpers
+│   ├── routes/              # API routes (SQL orchestration)
+│   └── styles/              # Tailwind source
 ├── .env.example
-├── eslint.config.js
 ├── package.json
-├── postcss.config.js
 ├── tailwind.config.js
+├── postcss.config.js
 └── README.md
 ```
 
@@ -121,3 +113,9 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 
 - `GET /health` → `{ "status": "ok" }`
 - `POST /api/query` → `{ prompt, plan, notices, results, executionTimeMs }`
+
+## 🧰 Useful Scripts
+
+- `bun run dev` — start the local server and Tailwind watcher (recommended during development).
+- `bun run dev:server` — start only the API (no Tailwind watch).
+- `bun run tailwind:build` — rebuild the static CSS bundle.

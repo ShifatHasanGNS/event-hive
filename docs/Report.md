@@ -136,7 +136,7 @@ The EventHive project fulfills its laboratory objectives by coupling a well-inde
 
 ## References
 
-- Google Cloud: Gemini API Documentation - https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini
-- Neon PostgreSQL Serverless Docs - https://neon.tech/docs/introduction
-- PostgreSQL 16 Documentation: Data Definition - https://www.postgresql.org/docs/current/ddl.html
-- Walter Mitty. “ER vs database schema diagrams.” Database Administrators Stack Exchange. https://dba.stackexchange.com/questions/119380/er-vs-database-schema-diagrams
+- [Google Cloud: Gemini API Documentation](https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini)
+- [Neon PostgreSQL Serverless Docs](https://neon.tech/docs/introduction)
+- [PostgreSQL 16 Documentation: Data Definition](https://www.postgresql.org/docs/current/ddl.html)
+- [Walter Mitty. “ER vs database schema diagrams.” Database Administrators Stack Exchange](https://dba.stackexchange.com/questions/119380/er-vs-database-schema-diagrams)

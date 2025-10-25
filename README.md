@@ -7,7 +7,7 @@ EventHive is an AI-assisted event database explorer for the Database Systems Lab
 - **Natural language to SQL/PL/pgSQL** via Gemini Flash with schema awareness and JSON-structured responses.
 - **Safe execution pipeline** that validates statements, rejects destructive commands, captures execution timings, and surfaces PostgreSQL notices.
 - **Neon-ready connection support** via `@neondatabase/serverless` (set `DATABASE_CLIENT=neon`).
-- **Modern dark UI** (Slate base palette) built with Tailwind CDN + vanilla JS: query composer, example chips, SQL viewer with copy, system message feed, and responsive multi-table results.
+- **Modern dark UI** (slate-inspired palette) built with Tailwind CSS (CLI build) and vanilla JS: query composer, example chips, SQL viewer with copy, system message feed, and responsive multi-table results.
 - **PostgreSQL starter schema and seed data** (`db/schema.sql`) covering users, events, registrations, feedback, and tags with indexes and constraints from the project plan.
 
 ## 🧱 Tech Stack
@@ -60,12 +60,12 @@ psql "$DATABASE_URL" -f db/schema.sql
 ### 5. Start the dev server
 
 ```bash
-bun dev
+bun run dev
 ```
 
 This runs Tailwind in watch mode and starts the Bun server together. Visit `http://localhost:4000` to load the EventHive interface.
 
-> Need only the API? Run `bun dev:server`. To rebuild styles for production, run `bun tailwind:build`.
+> Need only the API? Run `bun run dev:server`. To rebuild styles for production, run `bun run tailwind:build`.
 
 ## 🧠 Prompt Workflow
 
@@ -86,29 +86,33 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 ## 🛠 Project Structure
 
 ```.
+├── api/
+│   └── index.js              # Serverless adapter for deployment platforms (e.g., Vercel)
 ├── db/
 │   └── schema.sql            # Full schema + seed data from the project plan
+├── docs/
+│   └── Plan.md               # Original project plan & documentation
 ├── public/
+│   ├── app.js                # Frontend logic (fetch, rendering)
 │   ├── index.html            # Tailwind dark-mode workspace
 │   ├── schema.html           # Schema reference view
-│   ├── app.js                # Frontend logic (fetch, rendering)
 │   └── styles.css            # Compiled Tailwind build output
 ├── src/
 │   ├── app.js                # Express app factory + static hosting
-│   ├── index.js              # Local server entrypoint
 │   ├── config/
 │   │   └── schema-context.js # Schema summary injected into prompts
+│   ├── index.js              # Local Bun entrypoint
 │   ├── lib/
-│   │   ├── db.js             # pg Pool configuration
+│   │   ├── db.js             # pg/Neon execution helpers
 │   │   └── gemini-client.js  # Gemini Flash JSON response helper
 │   ├── routes/
 │   │   └── query.js          # AI generation + PostgreSQL execution pipeline
 │   └── styles/
-│       └── tailwind.css      # Tailwind entrypoint + custom layers
+│       └── tailwind.css      # Tailwind entrypoint + custom layers/component classes
 ├── .env.example
-├── EventHive_Project_Plan.md
-├── postcss.config.js
+├── eslint.config.js
 ├── package.json
+├── postcss.config.js
 ├── tailwind.config.js
 └── README.md
 ```

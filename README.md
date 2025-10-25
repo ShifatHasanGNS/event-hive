@@ -91,14 +91,15 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 │   ├── app.js                # Frontend logic (fetch, rendering)
 │   └── styles.css            # Extra theming + utilities
 ├── src/
-│   ├── routes/
-│   │   └── query.js          # AI generation + PostgreSQL execution pipeline
-│   ├── services/
-│   │   ├── gemini.js         # Gemini Flash JSON response helper
+│   ├── app.js                # Express app factory + static hosting
+│   ├── index.js              # Local server entrypoint
+│   ├── config/
 │   │   └── schema-context.js # Schema summary injected into prompts
-│   ├── utils/
-│   │   └── db.js             # pg Pool configuration
-│   └── server.js             # Express app + static hosting
+│   ├── lib/
+│   │   ├── db.js             # pg Pool configuration
+│   │   └── gemini-client.js  # Gemini Flash JSON response helper
+│   └── routes/
+│       └── query.js          # AI generation + PostgreSQL execution pipeline
 ├── .env.example
 ├── EventHive_Project_Plan.md
 ├── package.json
@@ -109,7 +110,3 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 
 - `GET /health` → `{ "status": "ok" }`
 - `POST /api/query` → `{ prompt, plan, notices, results, executionTimeMs }`
-
-## 📄 License
-
-MIT

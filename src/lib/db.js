@@ -27,10 +27,6 @@ const pool = useNeon
   });
 
 async function executeStatements(statements) {
-  return executeWithPool(statements);
-}
-
-async function executeWithPool(statements) {
   const client = await pool.connect();
   const notices = [];
   const results = [];

@@ -1,4 +1,4 @@
-const schemaContext = require('./schema-context');
+const schemaContext = require('../config/schema-context');
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
 

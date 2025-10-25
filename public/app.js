@@ -315,6 +315,7 @@ function renderResults(results) {
     card.appendChild(header);
 
     const hasRows = Array.isArray(result.rows) && result.rows.length;
+    const columnNames = getColumnNames(result);
 
     if (hasRows) {
       const tableWrapper = document.createElement('div');
@@ -326,7 +327,7 @@ function renderResults(results) {
       const thead = document.createElement('thead');
       thead.className = 'bg-white/5 backdrop-blur';
       const headerRow = document.createElement('tr');
-      getColumnNames(result).forEach((name) => {
+      columnNames.forEach((name) => {
         const th = document.createElement('th');
         th.scope = 'col';
         th.className = 'whitespace-nowrap px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-brand-200';
@@ -340,7 +341,7 @@ function renderResults(results) {
       result.rows.forEach((row) => {
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-white/5';
-        getColumnNames(result).forEach((name) => {
+        columnNames.forEach((name) => {
           const td = document.createElement('td');
           td.className = 'whitespace-nowrap px-4 py-2 text-brand-100';
           td.textContent = formatCellValue(row[name]);
@@ -430,26 +431,31 @@ function formatDuration(durationMs) {
   return Number(durationMs).toFixed(2);
 }
 
-function handleCopySql() {
-  const sql = generatedSql.dataset.generatedSql || generatedSql.value || '';
-  if (!sql.trim()) {
+function copyTextToClipboard(text, button, resetLabel = 'Copy') {
+  if (!button || typeof text !== 'string' || !text.trim()) {
     return;
   }
 
   navigator.clipboard
-    .writeText(sql)
+    .writeText(text)
     .then(() => {
-      copySqlBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copySqlBtn.textContent = 'Copy';
-      }, 2000);
+      updateCopyButtonLabel(button, 'Copied!', resetLabel);
     })
     .catch(() => {
-      copySqlBtn.textContent = 'Copy failed';
-      setTimeout(() => {
-        copySqlBtn.textContent = 'Copy';
-      }, 2000);
+      updateCopyButtonLabel(button, 'Copy failed', resetLabel);
     });
+}
+
+function updateCopyButtonLabel(button, label, resetLabel, timeout = 2000) {
+  button.textContent = label;
+  setTimeout(() => {
+    button.textContent = resetLabel;
+  }, timeout);
+}
+
+function handleCopySql() {
+  const sql = generatedSql.dataset.generatedSql || generatedSql.value || '';
+  copyTextToClipboard(sql, copySqlBtn);
 }
 
 function handleSqlInput() {
@@ -463,25 +469,7 @@ function handleSqlInput() {
 }
 
 function handleCopyPrompt() {
-  const prompt = promptInput.value.trim();
-  if (!prompt) {
-    return;
-  }
-
-  navigator.clipboard
-    .writeText(prompt)
-    .then(() => {
-      copyPromptButton.textContent = 'Copied!';
-      setTimeout(() => {
-        copyPromptButton.textContent = 'Copy';
-      }, 2000);
-    })
-    .catch(() => {
-      copyPromptButton.textContent = 'Copy failed';
-      setTimeout(() => {
-        copyPromptButton.textContent = 'Copy';
-      }, 2000);
-    });
+  copyTextToClipboard(promptInput.value, copyPromptButton);
 }
 
 function handleClearSql() {
@@ -595,12 +583,8 @@ function handleClearInput() {
 }
 
 function handlePromptInput() {
-  toggleClearButton();
-  setGenerateEnabled(hasPromptInput());
-}
-
-function toggleClearButton() {
   updatePromptActions();
+  setGenerateEnabled(hasPromptInput());
 }
 
 function hasPromptInput() {

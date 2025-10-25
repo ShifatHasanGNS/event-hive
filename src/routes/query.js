@@ -1,6 +1,6 @@
 const express = require('express');
-const { generateSqlFromPrompt } = require('../services/gemini');
-const { executeStatements } = require('../utils/db');
+const { generateSqlFromPrompt } = require('../lib/gemini-client');
+const { executeStatements } = require('../lib/db');
 
 const router = express.Router();
 

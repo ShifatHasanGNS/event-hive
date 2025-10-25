@@ -2,26 +2,18 @@
   "name": "event_hive",
   "version": "1.0.0",
   "description": "AI-assisted event database explorer with natural language querying",
-  "main": "src/server.js",
+  "main": "src/index.js",
   "scripts": {
-    "dev": "bun --watch src/server.js",
+    "dev": "bun --watch src/index.js",
     "build": "echo 'EventHive has no compilation step – static assets are ready.'",
-    "start": "bun src/server.js",
+    "start": "bun src/index.js",
     "lint": "bunx eslint \"src/**/*.js\" \"public/**/*.js\" \"api/**/*.js\"",
     "cleanup": "rm -rf node_modules bun.lock"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ShifatHasanGNS/event-hive.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/ShifatHasanGNS/event-hive/issues"
-  },
-  "homepage": "https://github.com/ShifatHasanGNS/event-hive#readme",
   "dependencies": {
     "@neondatabase/serverless": "1.0.2",
     "cors": "^2.8.5",
@@ -31,6 +23,7 @@
     "serverless-http": "4.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
     "eslint": "^9.36.0",
     "globals": "16.4.0"
   }

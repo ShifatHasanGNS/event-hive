@@ -11,7 +11,6 @@ The following sequence shows how EventHive is assembled across the backend and f
 5. [src/lib/gemini-client.js](../src/lib/gemini-client.js) — Client for Google Gemini 2.5 Flash with JSON-mode request/response handling and error normalization.
 6. [src/config/schema-context.js](../src/config/schema-context.js) — Structured schema summary injected into prompts so Gemini can understand the database.
 7. [db/schema.sql](../db/schema.sql) — PostgreSQL schema plus seed data that defines users, events, registrations, feedback, and tag relations.
-8. [api/index.js](../api/index.js) — Serverless adapter stub showing how the Express app can be exported for edge or Vercel-style deployments if needed later.
 
 ## Frontend Flow
 

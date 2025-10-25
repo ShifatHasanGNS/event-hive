@@ -87,7 +87,6 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 
 ```text
 .
-├── api/                     # Optional serverless adapter (local development only)
 ├── db/                      # PostgreSQL schema + seed script
 ├── docs/
 │   ├── Plan.md              # Original build plan

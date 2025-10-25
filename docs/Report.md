@@ -5,7 +5,7 @@
 - To design a normalized event management database that balances analytical and transactional workloads.
 - To enable natural language interaction with PostgreSQL through an AI-assisted application layer.
 - To safeguard data integrity by enforcing relational constraints, validation rules, and indexed access paths.
-- To demonstrate deployable tooling for laboratory evaluation, including schema bootstrapping and health monitoring.
+- To document lab-ready tooling for local evaluation, including schema bootstrapping and health monitoring.
 
 ## Introduction
 
@@ -124,7 +124,7 @@ erDiagram
 
 _Figure 2: Conceptual entity-relationship view showing participant, event, and tagging flows._
 
-**Deployment and User Experience:** The development workflow aligns with lab delivery by bundling schema initialization scripts, health endpoints, and Tailwind build tasks within Bun. Students launch the stack with `bun run dev`, while schema snapshots (`public/schema.html`) aid revision. The dark UI applies copy-to-clipboard assistance, accordion-based result browsing, and status chips, making the dataset approachable for guided exercises and self-directed exploration.
+**Deployment and User Experience:** The development workflow aligns with lab delivery by bundling schema initialization scripts, health endpoints, and Tailwind build tasks within Bun. The current codebase is intentionally local-first—no cloud deployment has been provisioned yet—so students launch the stack with `bun run dev`, while schema snapshots (`public/schema.html`) aid revision. The dark UI applies copy-to-clipboard assistance, accordion-based result browsing, and status chips, making the dataset approachable for guided exercises and self-directed exploration.
 
 ## Discussion
 

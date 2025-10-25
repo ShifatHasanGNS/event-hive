@@ -1,6 +1,6 @@
 # EventHive
 
-EventHive is an AI-assisted event database explorer for the Database Systems Lab project. It pairs Google Gemini Flash with a richly constrained PostgreSQL dataset so you can ask natural-language questions and instantly see the generated SQL, PostgreSQL notices (including `RAISE NOTICE` output), and result tables—all in a single-page dark UI.
+EventHive is an AI-assisted event database explorer for the Database Systems Lab project. It pairs Google Gemini Flash with a richly constrained PostgreSQL dataset so you can ask natural-language questions and instantly see the generated SQL, PostgreSQL notices (including `RAISE NOTICE` output), and result tables—all in a single-page dark UI. The project is currently local-only; no hosted deployment is bundled.
 
 ## ✨ Features
 

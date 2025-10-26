@@ -9,8 +9,7 @@
     content="EventHive lets you explore event data with natural language queries powered by Google Gemini and PostgreSQL." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 
@@ -101,8 +100,7 @@
         <div class="flex flex-wrap items-center justify-end gap-4">
           <button id="generate-button" type="submit" data-loading="false" class="btn-primary">
             <span data-slot="default">Generate SQL</span>
-            <span data-slot="loading"
-              class="hidden items-center gap-2 text-brand-100"><span
+            <span data-slot="loading" class="hidden items-center gap-2 text-brand-100"><span
                 class="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white"></span>
               Generating...</span>
           </button>
@@ -119,8 +117,7 @@
             <p class="mt-2 text-sm text-brand-300">Review and copy Gemini's statements before execution.</p>
           </div>
         </header>
-        <textarea id="generated-sql" spellcheck="false"
-          class="sql-editor mt-4 h-56 resize-none"
+        <textarea id="generated-sql" spellcheck="false" class="sql-editor mt-4 h-56 resize-none"
           placeholder="-- SQL will appear here once a prompt is generated"></textarea>
         <div class="mt-4 space-y-3">
           <p class="text-xs text-brand-500">
@@ -129,8 +126,7 @@
           <div class="flex flex-wrap items-center gap-2" id="sql-actions">
             <button id="run-sql-button" type="button" data-loading="false" disabled class="btn-secondary">
               <span data-slot="default">Execute Query</span>
-              <span data-slot="loading"
-                class="hidden items-center gap-2 text-brand-100"><span
+              <span data-slot="loading" class="hidden items-center gap-2 text-brand-100"><span
                   class="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white"></span>
                 Running...</span>
             </button>

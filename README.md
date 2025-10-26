@@ -94,7 +94,7 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 │   └── diagrams/            # Exported schema/ER figures
 ├── public/                  # Static assets served by Bun (HTML, JS, compiled CSS)
 ├── src/
-│   ├── app.js               # Express app factory
+│   ├── index.js               # Express app factory
 │   ├── config/
 │   │   └── schema-context.js
 │   ├── server.js             # Bun entrypoint

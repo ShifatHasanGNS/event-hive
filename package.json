@@ -2,14 +2,14 @@
   "name": "event_hive",
   "version": "1.0.0",
   "description": "AI-assisted event database explorer with natural language querying",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "bunx concurrently \"bunx tailwindcss -i src/styles/tailwind.css -o public/styles.css --watch\" \"bun --watch src/index.js\"",
-    "dev:server": "bun --watch src/index.js",
+    "dev": "bunx concurrently \"bunx tailwindcss -i src/styles/tailwind.css -o public/styles.css --watch\" \"bun --watch src/server.js\"",
+    "dev:server": "bun --watch src/server.js",
     "tailwind:build": "bunx tailwindcss -i src/styles/tailwind.css -o public/styles.css --minify",
     "tailwind:watch": "bunx tailwindcss -i src/styles/tailwind.css -o public/styles.css --watch",
     "build": "bun run tailwind:build",
-    "start": "bun src/index.js",
+    "start": "bun src/server.js",
     "lint": "bunx eslint \"src/**/*.js\" \"public/**/*.js\" \"api/**/*.js\"",
     "cleanup": "rm -rf node_modules bun.lock"
   },

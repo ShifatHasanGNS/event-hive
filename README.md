@@ -97,7 +97,7 @@ Destructive statements such as `DROP`, `TRUNCATE`, or `ALTER DATABASE` are proac
 │   ├── app.js               # Express app factory
 │   ├── config/
 │   │   └── schema-context.js
-│   ├── index.js             # Bun entrypoint
+│   ├── server.js             # Bun entrypoint
 │   ├── lib/                 # Database + Gemini helpers
 │   ├── routes/              # API routes (SQL orchestration)
 │   └── styles/              # Tailwind source
